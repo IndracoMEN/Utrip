@@ -1,18 +1,28 @@
 import "package:flutter/material.dart";
+import 'package:utrip_project/models/driver.dart';
 
 class Users_Card extends StatelessWidget {
+  final Driver driver;
+
+  const Users_Card({super.key, required this.driver});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
+      padding: const EdgeInsets.only(left: 20, right: 20),
       child: Container(
-        margin: const EdgeInsets.only(top: 30, bottom: 50),
+        margin: const EdgeInsets.only(top: 30),
         width: double.infinity,
-        height: 250,
+        height: 185,
         decoration: _borderCard(),
         child: Stack(
+          //Modificar STACK por Row, el diseño debe ser imagen del conductor del lado derecho,
+          //datos del conductor con fondo blanco en el lado izquierdo
           alignment: Alignment.bottomLeft,
-          children: [_backgroundImage(), _usersDetails()],
+          children: [
+            _backgroundImage(driver.foto),
+            usersDetails(title: driver.nombre!, subTitle: driver.facultad!)
+          ],
         ),
       ),
     );
@@ -30,7 +40,12 @@ class Users_Card extends StatelessWidget {
           ]);
 }
 
-class _usersDetails extends StatelessWidget {
+class usersDetails extends StatelessWidget {
+  final String title;
+  final String subTitle;
+
+  const usersDetails({required this.title, required this.subTitle});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -44,7 +59,7 @@ class _usersDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Alejandro Arrazola",
+              title,
               style: TextStyle(
                   fontSize: 15,
                   color: Colors.white,
@@ -53,7 +68,7 @@ class _usersDetails extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             Text(
-              "Facultad de Contadura y Admon.",
+              subTitle,
               style: TextStyle(
                 fontSize: 10,
                 color: Colors.white,
@@ -72,6 +87,8 @@ class _usersDetails extends StatelessWidget {
 }
 
 class _backgroundImage extends StatelessWidget {
+  final String? url;
+  const _backgroundImage(this.url);
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -79,11 +96,9 @@ class _backgroundImage extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: 400,
-        child: const FadeInImage(
+        child: FadeInImage(
           placeholder: AssetImage("assets/jar-loading.gif"),
-          image: NetworkImage(
-            "https://cdn.pixabay.com/photo/2015/01/08/18/30/entrepreneur-593371_960_720.jpg",
-          ),
+          image: NetworkImage(url!),
           fit: BoxFit.cover,
         ),
       ),
